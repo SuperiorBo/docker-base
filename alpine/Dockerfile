@@ -1,11 +1,14 @@
-FROM alpine:3.9
-LABEL Scott Mebberson (https://github.com/smebberson/docker-alpine)
+FROM alpine:latest
+LABEL MAINTAINER=chobon@aliyun.com
 
 # Add s6-overlay
 ENV S6_OVERLAY_VERSION=v1.22.1.0 \
     GO_DNSMASQ_VERSION=1.0.7
 
-RUN apk add --update --no-cache bind-tools curl libcap && \
+# change ALIYUN apk source
+RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.aliyun.com/g' /etc/apk/repositories
+
+RUN apk add --update --no-cache tzdata xz bind-tools curl libcap && \
     curl -sSL https://github.com/just-containers/s6-overlay/releases/download/${S6_OVERLAY_VERSION}/s6-overlay-amd64.tar.gz \
     | tar xfz - -C / && \
     curl -sSL https://github.com/janeczku/go-dnsmasq/releases/download/${GO_DNSMASQ_VERSION}/go-dnsmasq-min_linux-amd64 -o /bin/go-dnsmasq && \
@@ -18,5 +21,6 @@ RUN apk add --update --no-cache bind-tools curl libcap && \
 
 COPY root /
 
-ENTRYPOINT ["/init"]
+#ENTRYPOINT ["/init"]
+ENTRYPOINT [ "/entrypoint.sh && /init" ]
 CMD []
