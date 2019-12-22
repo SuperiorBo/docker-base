@@ -9,9 +9,9 @@ ENV S6_OVERLAY_VERSION=v1.22.1.0 \
 RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.aliyun.com/g' /etc/apk/repositories
 
 RUN apk add --update --no-cache tzdata xz bind-tools curl libcap && \
-    curl -sSL https://github.com/just-containers/s6-overlay/releases/download/${S6_OVERLAY_VERSION}/s6-overlay-amd64.tar.gz \
+    curl -SL -x 10.0.75.1:1080 https://github.com/just-containers/s6-overlay/releases/download/${S6_OVERLAY_VERSION}/s6-overlay-amd64.tar.gz \
     | tar xfz - -C / && \
-    curl -sSL https://github.com/janeczku/go-dnsmasq/releases/download/${GO_DNSMASQ_VERSION}/go-dnsmasq-min_linux-amd64 -o /bin/go-dnsmasq && \
+    curl -SL -x 10.0.75.1:1080 https://github.com/janeczku/go-dnsmasq/releases/download/${GO_DNSMASQ_VERSION}/go-dnsmasq-min_linux-amd64 -o /bin/go-dnsmasq && \
     chmod +x /bin/go-dnsmasq && \
     apk del curl && \
     # create user and give binary permissions to bind to lower port
@@ -21,6 +21,5 @@ RUN apk add --update --no-cache tzdata xz bind-tools curl libcap && \
 
 COPY root /
 
-#ENTRYPOINT ["/init"]
-ENTRYPOINT [ "/entrypoint.sh && /init" ]
+ENTRYPOINT ["/init"]
 CMD []
