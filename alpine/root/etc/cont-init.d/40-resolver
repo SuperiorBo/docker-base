@@ -1,3 +1,4 @@
 #!/usr/bin/with-contenv sh
-
-mkdir -p `dirname $GO_DNSMASQ_LOG_FILE`
+if [ -z "$GO_DNSMASQ_LOG_FILE" ]; then
+    mkdir -p `dirname $GO_DNSMASQ_LOG_FILE`
+fi
