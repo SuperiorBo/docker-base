@@ -11,7 +11,7 @@ ENV S6_OVERLAY_VERSION=v1.22.1.0 \
 ADD https://github.com/just-containers/s6-overlay/releases/download/${S6_OVERLAY_VERSION}/s6-overlay-amd64.tar.gz /tmp/ 
 RUN gunzip -c /tmp/s6-overlay-amd64.tar.gz | tar -xf - -C / && rm -rf /tmp/s6-overlay-amd64.tar.gz
 
-ADD https://github.com/janeczku/go-dnsmasq/releases/download/${GO_DNSMASQ_VERSION}/go-dnsmasq-min_linux-amd64 /go-dnsmasq
+ADD https://github.com/janeczku/go-dnsmasq/releases/download/${GO_DNSMASQ_VERSION}/go-dnsmasq-min_linux-amd64 /bin/go-dnsmasq
 RUN chmod +x /bin/go-dnsmasq
 
 # RUN apk add --update --no-cache tzdata xz bind-tools curl libcap && \
