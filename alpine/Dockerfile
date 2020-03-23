@@ -4,10 +4,10 @@ LABEL MAINTAINER=chobon@aliyun.com
 # Add s6-overlay
 ENV S6_OVERLAY_VERSION=v1.22.1.0 \
     GO_DNSMASQ_VERSION=1.0.7 \
-    TIME_ZONE=Asiz/Shanghai
+    TIME_ZONE=Asia/Shanghai
 
 # change ALIYUN apk source
-#RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.aliyun.com/g' /etc/apk/repositories
+RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.aliyun.com/g' /etc/apk/repositories
 
 ADD https://github.com/just-containers/s6-overlay/releases/download/${S6_OVERLAY_VERSION}/s6-overlay-amd64.tar.gz /tmp/ 
 RUN gunzip -c /tmp/s6-overlay-amd64.tar.gz | tar -xf - -C / && rm -rf /tmp/s6-overlay-amd64.tar.gz
