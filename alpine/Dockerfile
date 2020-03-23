@@ -21,8 +21,8 @@ RUN apk add --update --no-cache tzdata bind-tools libcap && \
     adduser -D -g "" -s /bin/sh -G go-dnsmasq go-dnsmasq && \
     setcap CAP_NET_BIND_SERVICE=+eip /bin/go-dnsmasq
 
-RUN echo "${TIME_ZONE}" > /etc/timezone \
-    ln -sf /usr/share/zoneinfo/${TIME_ZONE} /etc/localtime
+RUN ln -sf /usr/share/zoneinfo/${TIME_ZONE} /etc/localtime && \
+    echo "${TIME_ZONE}" > /etc/timezone
 
 ADD root /
 
