@@ -15,7 +15,7 @@ ADD https://github.com/janeczku/go-dnsmasq/releases/download/${GO_DNSMASQ_VERSIO
 RUN chmod +x /bin/go-dnsmasq
 
 # create user and give binary permissions to bind to lower port
-RUN apk add --update --no-cache tzdata xz bind-tools libcap && \
+RUN apk add --update --no-cache tzdata bind-tools libcap && \
     addgroup go-dnsmasq && \
     adduser -D -g "" -s /bin/sh -G go-dnsmasq go-dnsmasq && \
     setcap CAP_NET_BIND_SERVICE=+eip /bin/go-dnsmasq
