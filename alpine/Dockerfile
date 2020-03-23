@@ -14,14 +14,9 @@ RUN gunzip -c /tmp/s6-overlay-amd64.tar.gz | tar -xf - -C / && rm -rf /tmp/s6-ov
 ADD https://github.com/janeczku/go-dnsmasq/releases/download/${GO_DNSMASQ_VERSION}/go-dnsmasq-min_linux-amd64 /bin/go-dnsmasq
 RUN chmod +x /bin/go-dnsmasq
 
-# RUN apk add --update --no-cache tzdata xz bind-tools curl libcap && \
-#     curl -SL https://github.com/just-containers/s6-overlay/releases/download/${S6_OVERLAY_VERSION}/s6-overlay-amd64.tar.gz \
-#     | tar xfz - -C / && \
-#     curl -SL https://github.com/janeczku/go-dnsmasq/releases/download/${GO_DNSMASQ_VERSION}/go-dnsmasq-min_linux-amd64 -o /bin/go-dnsmasq && \
-#     chmod +x /bin/go-dnsmasq && \
-#     apk del curl && \
-    # create user and give binary permissions to bind to lower port
-RUN addgroup go-dnsmasq && \
+# create user and give binary permissions to bind to lower port
+RUN apk add --update --no-cache tzdata xz bind-tools libcap && \
+    addgroup go-dnsmasq && \
     adduser -D -g "" -s /bin/sh -G go-dnsmasq go-dnsmasq && \
     setcap CAP_NET_BIND_SERVICE=+eip /bin/go-dnsmasq
 
