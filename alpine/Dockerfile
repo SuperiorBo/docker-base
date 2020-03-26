@@ -7,16 +7,16 @@ ENV S6_OVERLAY_VERSION=v1.22.1.0 \
     TIME_ZONE=Asia/Shanghai
 
 # change ALIYUN apk source
-RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.aliyun.com/g' /etc/apk/repositories
-
-ADD https://github.com/just-containers/s6-overlay/releases/download/${S6_OVERLAY_VERSION}/s6-overlay-amd64.tar.gz /tmp/ 
-RUN gunzip -c /tmp/s6-overlay-amd64.tar.gz | tar -xf - -C / && rm -rf /tmp/s6-overlay-amd64.tar.gz
-
-ADD https://github.com/janeczku/go-dnsmasq/releases/download/${GO_DNSMASQ_VERSION}/go-dnsmasq-min_linux-amd64 /bin/go-dnsmasq
-RUN chmod +x /bin/go-dnsmasq
+#RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.aliyun.com/g' /etc/apk/repositories
 
 # create user and give binary permissions to bind to lower port
-RUN apk add --update --no-cache tzdata bind-tools libcap && \
+RUN apk add --update --no-cache tzdata bind-tools curl libcap && \
+    curl -sSL https://github.com/just-containers/s6-overlay/releases/download/${S6_OVERLAY_VERSION}/s6-overlay-amd64.tar.gz \
+    | tar xfz - -C / && \
+    curl -sSL https://github.com/janeczku/go-dnsmasq/releases/download/${GO_DNSMASQ_VERSION}/go-dnsmasq-min_linux-amd64 /bin/go-dnsmasq && \
+    chmod +x /bin/go-dnsmasq && \
+    apk del curl && \
+    # create user and give binary permissions to bind to lower port
     addgroup go-dnsmasq && \
     adduser -D -g "" -s /bin/sh -G go-dnsmasq go-dnsmasq && \
     setcap CAP_NET_BIND_SERVICE=+eip /bin/go-dnsmasq
